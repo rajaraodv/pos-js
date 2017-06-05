@@ -10,8 +10,12 @@ var TransformationRules = require('./BrillTransformationRules');
 var transformationRules = new TransformationRules();
 
 module.exports = POSTagger;
-function POSTagger(){
-    this.lexicon = require('./lexicon');
+function POSTagger(lexicon){
+  if(lexicon) {
+    this.lexicon = Object.assign({}, require('./lexicon'), lexicon);
+  } else {
+     this.lexicon = require('./lexicon');
+  }
 }
 
 POSTagger.prototype.wordInLexicon = function(word){
