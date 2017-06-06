@@ -10,24 +10,27 @@ var TransformationRules = require('./BrillTransformationRules');
 var transformationRules = new TransformationRules();
 
 module.exports = POSTagger;
-function POSTagger(lexicon){
-  if(lexicon) {
+function POSTagger(lexicon, customRules) {
+  if (lexicon) {
     this.lexicon = Object.assign({}, require('./lexicon'), lexicon);
   } else {
-     this.lexicon = require('./lexicon');
+    this.lexicon = require('./lexicon');
+  }
+  if (customRules) {
+    transformationRules.setRules(customRules);
   }
 }
 
-POSTagger.prototype.wordInLexicon = function(word){
-    var ss = this.lexicon[word];
-    if (ss != null)
-        return true;
-    // 1/22/2002 mod (from Lisp code): if not in hash, try lower case:
-    if (!ss)
-        ss = this.lexicon[word.toLowerCase()];
-    if (ss)
-        return true;
-    return false;
+POSTagger.prototype.wordInLexicon = function(word) {
+  var ss = this.lexicon[word];
+  if (ss != null)
+    return true;
+  // 1/22/2002 mod (from Lisp code): if not in hash, try lower case:
+  if (!ss)
+    ss = this.lexicon[word.toLowerCase()];
+  if (ss)
+    return true;
+  return false;
 }
 
 POSTagger.prototype.tag = function(words) {
@@ -62,9 +65,9 @@ POSTagger.prototype.tag = function(words) {
 }
 
 POSTagger.prototype.prettyPrint = function(taggedWords) {
-	for (i in taggedWords) {
-        print(taggedWords[i][0] + "(" + taggedWords[i][1] + ")");
-    }
+  for (i in taggedWords) {
+    print(taggedWords[i][0] + "(" + taggedWords[i][1] + ")");
+  }
 }
 
 POSTagger.prototype.extendLexicon = function(lexicon) {
